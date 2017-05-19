@@ -1,0 +1,39 @@
+endpoint: "<%= @endpoint %>"
+# endpoint: https://acme-v01.api.letsencrypt.org/ # productilon
+storage:
+  type: <%= @storage_type %>
+<% if @storage_type == 's3' %>
+  region: <%= @storage_config['s3_region'] %>
+  bucket: <%= @storage_config['s3_bucket_name'] %>
+  prefix: <%= @storage_config['s3_prefix'] %>
+  <% unless @storage_config['s3_access_key_id'].empty? || @storage_config['s3_secret_access_key'].empty? %>
+  aws_access_key:
+    access_key_id: "<%= @storage_config['s3_access_key_id'] %>"
+    secret_access_key: "<%= @storage_config['s3_secret_access_key'] %>"
+  <% end %>
+<% elsif @storage_type == 'filesystem' %>
+  path: "<%= @storage_config['filesystem_path'] %>"
+<% end %>
+  # configure where to store keys and certificates; described later
+challenge_responders:
+  - <%= @challenge_responder_type %>:
+    <% unless @challenge_responder_config['route53_access_key_id'].empty? || @challenge_responder_config['route53_secret_access_key'].empty? %>
+      aws_access_key:
+        access_key_id: "<%= @challenge_responder_config['route53_access_key_id'] %>"
+        secret_access_key: "<%= @challenge_responder_config['route53_secret_access_key'] %>"
+        <% unless @challenge_responder_config['route53_session_token'].empty? %>
+        session_token: <%= @challenge_responder_config['route53_session_token'] %>
+        <% end %>
+    <% end %>
+    <% unless @hosted_zone_map_domain_name.empty? || @hosted_zone_map_id.empty? %>
+      hosted_zone_map:
+        "<%= @hosted_zone_map_domain_name %>": "<%= @hosted_zone_map_id %>"
+    <% end %>
+  # configure how to respond ACME challenges; described later
+post_issueing_hooks:
+  "<%= @common_name %>":
+    - shell:
+      command: "touch <%= "#{@post_issueing_hooks_create_lock_path}-#{@common_name}" %>"
+
+account_key_passphrase: <%= @account_key_passphrase %>
+certificate_key_passphrase: <%= @certificate_key_passphrase %>
