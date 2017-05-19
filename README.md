@@ -1,32 +1,20 @@
 # acmesmith Cookbook
 
-TODO: Enter the cookbook description here.
-
-e.g.
-This cookbook makes your favorite breakfast sandwich.
+Cookbook to get Acmesmith to manage SSL certificates
 
 ## Requirements
 
-TODO: List your cookbook requirements. Be sure to include any requirements this cookbook has on platforms, libraries, other cookbooks, packages, operating systems, etc.
-
-e.g.
 ### Platforms
 
-- SandwichOS
+- Ubuntu 16.04
 
 ### Chef
 
 - Chef 12.0 or later
 
-### Cookbooks
-
-- `toaster` - acmesmith needs toaster to brown your bagel.
-
 ## Attributes
 
-TODO: List your cookbook attributes here.
 
-e.g.
 ### acmesmith::default
 
 <table>
@@ -37,10 +25,179 @@ e.g.
     <th>Default</th>
   </tr>
   <tr>
-    <td><tt>['acmesmith']['bacon']</tt></td>
-    <td>Boolean</td>
+    <td><tt>['acmesmith']['version']</tt></td>
+    <td>String</td>
     <td>whether to include bacon</td>
-    <td><tt>true</tt></td>
+    <td><tt>'0.6.1'</tt></td>
+  </tr>
+  <tr>
+    <td><tt>['acmesmith']['config']['path']</tt></td>
+    <td>String</td>
+    <td>whether to include bacon</td>
+    <td><tt>'/tmp' # set this</tt></td>
+  </tr>
+  <tr>
+    <td><tt>['acmesmith']['bindir']</tt></td>
+    <td>String</td>
+    <td>whether to include bacon</td>
+    <td><tt>'/usr/local/bin'</tt></td>
+  </tr>
+  <tr>
+    <td><tt>['acmesmith']['config']['endpoint']</tt></td>
+    <td>String</td>
+    <td>whether to include bacon</td>
+    <td><tt>'https://acme-staging.api.letsencrypt.org/' # set this</tt></td>
+  </tr>
+
+  <tr>
+    <td><tt>['acmesmith']['config']['storage_type']</tt></td>
+    <td>String</td>
+    <td>whether to include bacon</td>
+    <td><tt>'s3'</tt></td>
+  </tr>
+
+  <tr>
+    <td><tt>['acmesmith']['config']['storage']['s3_region']</tt></td>
+    <td>String</td>
+    <td>whether to include bacon</td>
+    <td><tt>'us-east-1' # set this</tt></td>
+  </tr>
+  <tr>
+    <td><tt>['acmesmith']['config']['storage']['s3_bucket_name']</tt></td>
+    <td>String</td>
+    <td>whether to include bacon</td>
+    <td><tt>'some-bucket' # set this</tt></td>
+  </tr>
+  <tr>
+    <td><tt>['acmesmith']['config']['storage']['s3_prefix']</tt></td>
+    <td>String</td>
+    <td>whether to include bacon</td>
+    <td><tt>''</tt></td>
+  </tr>
+  <tr>
+    <td><tt>['acmesmith']['config']['storage']['s3_access_key_id']</tt></td>
+    <td>String</td>
+    <td>whether to include bacon</td>
+    <td><tt>'' # set this</tt></td>
+  </tr>
+  <tr>
+    <td><tt>['acmesmith']['config']['storage']['s3_secret_access_key']</tt></td>
+    <td>String</td>
+    <td>whether to include bacon</td>
+    <td><tt>'' # set this</tt></td>
+  </tr>
+
+  <tr>
+    <td><tt>['acmesmith']['config']['storage']['filesystem_path']</tt></td>
+    <td>String</td>
+    <td>whether to include bacon</td>
+    <td><tt>'/tmp/keys'</tt></td>
+  </tr>
+
+  <tr>
+    <td><tt>['acmesmith']['config']['challenge_responders_type']</tt></td>
+    <td>String</td>
+    <td>whether to include bacon</td>
+    <td><tt>'route53'</tt></td>
+  </tr>
+
+  <tr>
+    <td><tt>['acmesmith']['config']['challenge_responder']['route53_access_key_id']</tt></td>
+    <td>String</td>
+    <td>whether to include bacon</td>
+    <td><tt>'' # set this</tt></td>
+  </tr>
+  <tr>
+    <td><tt>['acmesmith']['config']['challenge_responder']['route53_secret_access_key']</tt></td>
+    <td>String</td>
+    <td>whether to include bacon</td>
+    <td><tt>'' # set this</tt></td>
+  </tr>
+  <tr>
+    <td><tt>['acmesmith']['config']['challenge_responder']['route53_session_token']</tt></td>
+    <td>String</td>
+    <td>whether to include bacon</td>
+    <td><tt>'' # set this</tt></td>
+  </tr>
+
+
+  <tr>
+    <td><tt>['acmesmith']['config']['hosted_zone_map_domain_name']</tt></td>
+    <td>String</td>
+    <td>whether to include bacon</td>
+    <td><tt>''</tt></td>
+  </tr>
+  <tr>
+    <td><tt>['acmesmith']['config']['hosted_zone_map_id']</tt></td>
+    <td>String</td>
+    <td>whether to include bacon</td>
+    <td><tt>''</tt></td>
+  </tr>
+
+  <tr>
+    <td><tt>['acmesmith']['config']['post_issueing_hooks_create_lock_path']</tt></td>
+    <td>String</td>
+    <td>whether to include bacon</td>
+    <td><tt>'/tmp/certs-has-been-issued'</tt></td>
+  </tr>
+
+  <tr>
+    <td><tt>['acmesmith']['config']['account_key_passphrase']</tt></td>
+    <td>String</td>
+    <td>whether to include bacon</td>
+    <td><tt>'password' # set this</tt></td>
+  </tr>
+  <tr>
+    <td><tt>['acmesmith']['config']['certificate_key_passphrase']</tt></td>
+    <td>String</td>
+    <td>whether to include bacon</td>
+    <td><tt>'secret' # set this</tt></td>
+  </tr>
+
+
+  <tr>
+    <td><tt>['acmesmith']['domain']</tt></td>
+    <td>String</td>
+    <td>whether to include bacon</td>
+    <td><tt>'' # set this</tt></td>
+  </tr>
+  <tr>
+    <td><tt>['acmesmith']['common_name']</tt></td>
+    <td>String</td>
+    <td>whether to include bacon</td>
+    <td><tt>'' # set this</tt></td>
+  </tr>
+  <tr>
+    <td><tt>['acmesmith']['contact']</tt></td>
+    <td>String</td>
+    <td>whether to include bacon</td>
+    <td><tt>'' # set this</tt></td>
+  </tr>
+
+  <tr>
+    <td><tt>['acmesmith']['certificate_path']</tt></td>
+    <td>String</td>
+    <td>whether to include bacon</td>
+    <td><tt>'' </tt></td>
+  </tr>
+  <tr>
+    <td><tt>['acmesmith']['private_key_path']</tt></td>
+    <td>String</td>
+    <td>whether to include bacon</td>
+    <td><tt>'' </tt></td>
+  </tr>
+  <tr>
+    <td><tt>['acmesmith']['pkcs12_path']</tt></td>
+    <td>String</td>
+    <td>whether to include bacon</td>
+    <td><tt>''</tt></td>
+  </tr>
+
+  <tr>
+    <td><tt>['acmesmith']['renewal_script_path']</tt></td>
+    <td>String</td>
+    <td>whether to include bacon</td>
+    <td><tt>'/usr/local/bin/'</tt></td>
   </tr>
 </table>
 
@@ -48,7 +205,6 @@ e.g.
 
 ### acmesmith::default
 
-TODO: Write usage instructions for each cookbook.
 
 e.g.
 Just include `acmesmith` in your node's `run_list`:
@@ -76,5 +232,7 @@ e.g.
 
 ## License and Authors
 
-Authors: TODO: List authors
+Authors:
+
+- [bitsapien](https://github.com/bitsapien)
 
