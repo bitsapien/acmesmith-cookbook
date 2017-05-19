@@ -4,5 +4,3 @@ acmesmith renew
 acmesmith save-certificate <%= @common_name %> --output=@certificate_path
 acmesmith save-private-key <%= @common_name %> --output=@private_key_path
 acmesmith save-pkcs12 <%= @common_name %> --output=@pkcs12_path
-
-service nginx restart
