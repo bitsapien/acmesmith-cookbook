@@ -7,30 +7,34 @@
 # All rights reserved - Do Not Redistribute
 #
 
+app_name = 'acmesmith'
 
-chef_gem 'acmesmith' do
+
+gem_package app_name do
   action :install
-  version node['acmesmith']['version']
-  compile_time false if respond_to?(:compile_time)
+  options "--bindir #{node['acmesmith']['bindir']}"
+  version node[app_name]['version']
 end
 
-template "#{node.default['acmesmith']['config']['path']}/acmesmith.yml" do
-  source 'acmesmith.yml.erb'
+app_path = "#{node['acmesmith']['bindir']}/#{app_name}"
+
+template "#{node[app_name]['config']['path']}/#{app_name}.yml" do
+  source "#{app_name}.yml.erb"
   owner "root"
   group "root"
   mode 00644
   variables(
-  	endpoint: node['acmesmith']['config']['endpoint'],
-  	storage_type: node['acmesmith']['config']['storage_type'],
-  	storage_config: node['acmesmith']['config']['storage'],
-  	challenge_responder_type: node['acmesmith']['config']['challenge_responder_type'],
-  	challenge_responder_config: node['acmesmith']['config']['challenge_responder'],
-  	hosted_zone_map_domain_name: "#{node['acmesmith']['domain']}.",
-  	hosted_zone_map_id: node['acmesmith']['config']['hosted_zone_map_id'],
-  	post_issueing_hooks_create_lock_path: node['acmesmith']['config']['post_issueing_hooks_create_lock_path'],
-  	account_key_passphrase: node['acmesmith']['config']['account_key_passphrase'],
-  	certificate_key_passphrase: node['acmesmith']['config']['certificate_key_passphrase'],
-  	common_name: node['acmesmith']['common_name']
+    account_key_passphrase:                 node[app_name]['config']['account_key_passphrase'],
+    certificate_key_passphrase:             node[app_name]['config']['certificate_key_passphrase'],
+    challenge_responder_config:             node[app_name]['config']['challenge_responder'],
+    challenge_responder_type:               node[app_name]['config']['challenge_responder_type'],
+    common_name:                            node[app_name]['common_name'],
+    endpoint:                               node[app_name]['config']['endpoint'],
+    hosted_zone_map_domain_name:            "#{node[app_name]['domain']}.",
+    hosted_zone_map_id:                     node[app_name]['config']['hosted_zone_map_id'],
+    post_issueing_hooks_create_lock_path:   node[app_name]['config']['post_issueing_hooks_create_lock_path'],
+    storage_config:                         node[app_name]['config']['storage'],
+    storage_type:                           node[app_name]['config']['storage_type']
   )
 end
 
@@ -39,41 +43,30 @@ end
 # check of certificate exists ?
 # if yes, do nothing
 # if not
-unless ::File.exist?(node['acmesmith']['config']['post_issueing_hooks_create_lock_path'])
-	execute 'add_acme_contact' do
-	  command "acmesmith register #{node['acmesmith']['contact']}"
-	end
+certificate_present = ::File.exist?(node.default['acmesmith']['certificate_path']) && ::File.exist?(node.default['acmesmith']['private_key_path']) && ::File.exist?(node.default['acmesmith']['pkcs12_path'])
 
-	execute 'authorize_domain' do
-	  command "acmesmith authorize #{node['acmesmith']['domain']}"
-	end
 
-	execute 'request_certificates' do
-	  command "acmesmith request #{node['acmesmith']['common_name']}"
-	end
+bash 'generate_certificates' do 
+  cwd node['acmesmith']['bindir']
+  code <<-EOH
+    #{app_path} register         #{node[app_name]['contact']}
+    #{app_path} authorize        #{node[app_name]['domain']}
+    #{app_path} request          #{node[app_name]['common_name']}
+    #{app_path} save-certificate #{node[app_name]['common_name']} --output=#{node[app_name]['certificate_path']}
+    #{app_path} save-private-key #{node[app_name]['common_name']} --output=#{node[app_name]['private_key_path']}
+    #{app_path} save-pkcs12      #{node[app_name]['common_name']} --output=#{node[app_name]['pkcs12_path']}
+    EOH
+  not_if certificate_present
+end
 
-	execute 'save_certificate' do
-	  command "acmesmith save-certificate #{node['acmesmith']['common_name']} --output=#{node['acmesmith']['certificate_path']}"
-	  command "acmesmith save-private-key #{node['acmesmith']['common_name']} --output=#{node['acmesmith']['private_key_path']}"
-	  command "acmesmith save-pkcs12 #{node['acmesmith']['common_name']} --output=#{node['acmesmith']['pkcs12_path']}"
-	end
-
-	template "#{node['acmesmith']['renewal_script_path']}/acmesmith-renewal.sh" do
-	  source 'acmesmith-renewal.sh.erb'
-	  owner "root"
-	  group "root"
-	  mode 00755
-	  variables(
-	  	common_name: node['acmesmith']['common_name'],
-	  	certificate_path: node['acmesmith']['certificate_path'],
-	  	private_key_path: node['acmesmith']['private_key_path'],
-	  	pkcs12_path: node['acmesmith']['pkcs12_path']
-	  )
-	end
+cookbook_file "#{}/#{app_name}-renewal-bot.sh"
+  source "#{app_name}-renewal-bot.sh"
+  mode 00755
+  action :create_if_missing
+end
 
 	cron 'renew_ssl_certificates' do 
-		command "./#{node['acmesmith']['renewal_script_path']}/acmesmith-renewal.sh &> /tmp/acmesmith-renewal.log"
-		user 'root'
+		command "#{node[app_name]['renewal_script_path']}/#{app_name}-renewal-bot.sh &> /tmp/#{app_name}-renewal.log" 
 		hour 1
 		minute 0
 	end

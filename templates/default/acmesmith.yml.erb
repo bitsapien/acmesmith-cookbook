@@ -29,11 +29,5 @@ challenge_responders:
       hosted_zone_map:
         "<%= @hosted_zone_map_domain_name %>": "<%= @hosted_zone_map_id %>"
     <% end %>
-  # configure how to respond ACME challenges; described later
-post_issueing_hooks:
-  "<%= @common_name %>":
-    - shell:
-      command: "touch <%= "#{@post_issueing_hooks_create_lock_path}-#{@common_name}" %>"
-
 account_key_passphrase: <%= @account_key_passphrase %>
 certificate_key_passphrase: <%= @certificate_key_passphrase %>
