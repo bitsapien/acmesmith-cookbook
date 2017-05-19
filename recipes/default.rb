@@ -32,7 +32,6 @@ template "#{node[app_name]['config']['path']}/#{app_name}.yml" do
     endpoint:                               node[app_name]['config']['endpoint'],
     hosted_zone_map_domain_name:            "#{node[app_name]['domain']}.",
     hosted_zone_map_id:                     node[app_name]['config']['hosted_zone_map_id'],
-    post_issueing_hooks_create_lock_path:   node[app_name]['config']['post_issueing_hooks_create_lock_path'],
     storage_config:                         node[app_name]['config']['storage'],
     storage_type:                           node[app_name]['config']['storage_type']
   )

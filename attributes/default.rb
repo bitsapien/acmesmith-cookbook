@@ -26,7 +26,6 @@ node.default['acmesmith']['config']['challenge_responder']['route53_session_toke
 node.default['acmesmith']['config']['hosted_zone_map_domain_name'] = ''
 node.default['acmesmith']['config']['hosted_zone_map_id'] = ''
 
-node.default['acmesmith']['config']['post_issueing_hooks_create_lock_path'] = '/tmp/certs-has-been-issued'
 
 node.default['acmesmith']['config']['account_key_passphrase'] = 'password' # set this
 node.default['acmesmith']['config']['certificate_key_passphrase'] = 'secret' # set this
