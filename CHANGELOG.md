@@ -3,7 +3,7 @@
 This file is used to list changes made in each version of the acmesmith cookbook.
 
 ## 0.1.0
-- [your_name] - Initial release of acmesmith
+- [bitsapien] - Initial release of acmesmith
 
 - - -
 Check the [Markdown Syntax Guide](http://daringfireball.net/projects/markdown/syntax) for help with Markdown.

@@ -37,7 +37,6 @@ template "#{node[app_name]['config']['path']}/#{app_name}.yml" do
   )
 end
 
-end
 
 # check of certificate exists ?
 # if yes, do nothing
@@ -58,15 +57,21 @@ bash 'generate_certificates' do
   not_if certificate_present
 end
 
-cookbook_file "#{}/#{app_name}-renewal-bot.sh"
+template "#{node[app_name]['config']['path']}/#{app_name}.yml" do
   source "#{app_name}-renewal-bot.sh"
   mode 00755
+  variables(
+    common_name: node[app_name]['common_name'],
+    certificate_path: node[app_name]['certificate_path'],
+    private_key_path: node[app_name]['private_key_path'] 
+    pkcs12_path: node[app_name]['pkcs12_path'] 
+    acmesmith_path: node['acmesmith']['bindir']
+  )
   action :create_if_missing
 end
 
-	cron 'renew_ssl_certificates' do 
-		command "#{node[app_name]['renewal_script_path']}/#{app_name}-renewal-bot.sh &> /tmp/#{app_name}-renewal.log" 
-		hour 1
-		minute 0
-	end
+cron 'renew_ssl_certificates' do 
+	command "#{node[app_name]['renewal_script_path']}/#{app_name}-renewal-bot.sh -n #{node[app_name]['common_name']} -c #{node[app_name]['certificate_path']} -p #{node[app_name]['private_key_path']} -k #{node[app_name]['pkcs12_path']} &> /tmp/#{app_name}-renewal.log" 
+	hour 1
+	minute 0
 end
