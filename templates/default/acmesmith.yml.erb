@@ -31,3 +31,9 @@ challenge_responders:
     <% end %>
 account_key_passphrase: <%= @account_key_passphrase %>
 certificate_key_passphrase: <%= @certificate_key_passphrase %>
+post_issueing_hooks:
+  "<%= @common_name %>":
+    - shell:
+        command: <%= @acmesmith_path %> save-certificate <%= @common_name %> --output=<%= @certificate_path %>  -c <%= @config_path %>
+    - shell:
+        command: <%= @acmesmith_path %> save-private-key <%= @common_name %> --output=<%= @private_key_path %> -c <%= @config_path %>

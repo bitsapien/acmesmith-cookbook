@@ -16,7 +16,7 @@ node.default['acmesmith']['config']['storage']['filesystem_path'] = '/tmp/keys'
 
 
 
-node.default['acmesmith']['config']['challenge_responders_type'] = 'route53'
+node.default['acmesmith']['config']['challenge_responder_type'] = 'route53'
 
 node.default['acmesmith']['config']['challenge_responder']['route53_access_key_id'] = '' # set this
 node.default['acmesmith']['config']['challenge_responder']['route53_secret_access_key'] = '' # set this
@@ -33,10 +33,12 @@ node.default['acmesmith']['config']['certificate_key_passphrase'] = 'secret' # s
 
 node.default['acmesmith']['domain'] = '' # set this
 node.default['acmesmith']['common_name'] = '' # set this
+node.default['acmesmith']['sans'] = [] # set this
 node.default['acmesmith']['contact'] = '' # set this
 
-node.default['acmesmith']['certificate_path'] = '' 
-node.default['acmesmith']['private_key_path'] = '' 
-node.default['acmesmith']['pkcs12_path'] = ''
+node.default['acmesmith']['certificate_path'] = ''  # set this
+node.default['acmesmith']['private_key_path'] = ''  # set this
+node.default['acmesmith']['pkcs12_path'] = '' # set this
 
-node.default['acmesmith']['renewal_script_path'] = '/usr/local/bin/'
+node.default['acmesmith']['auto_renew_days'] = '5'
+node.default['acmesmith']['auto_renew_log_path'] = '/tmp/acmesmith-renewal.log'
