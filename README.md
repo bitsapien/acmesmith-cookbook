@@ -47,6 +47,23 @@ Cookbook to get Acmesmith to manage SSL certificates
 | ['acmesmith']['auto_renew_days'] |String |Renew certificates which being expired soon | '5' |
 | ['acmesmith']['auto_renew_log_path'] |String |Logs for cron that renews certificates | '/tmp/acmesmith-renewal.log' |
 
+The below variables need to be set (where default values might fail) :
+
+* ['acmesmith']['config']['storage']['s3_region']
+* ['acmesmith']['config']['storage']['s3_bucket_name']
+* ['acmesmith']['config']['storage']['s3_access_key_id']
+* ['acmesmith']['config']['storage']['s3_secret_access_key']
+* ['acmesmith']['config']['challenge_responder']['route53_access_key_id']
+* ['acmesmith']['config']['challenge_responder']['route53_secret_access_key']
+* ['acmesmith']['config']['challenge_responder']['route53_session_token']
+* ['acmesmith']['config']['account_key_passphrase']
+* ['acmesmith']['config']['certificate_key_passphrase']
+* ['acmesmith']['domain']
+* ['acmesmith']['common_name']
+* ['acmesmith']['contact']
+* ['acmesmith']['certificate_path']
+* ['acmesmith']['private_key_path']
+
 ## Usage
 
 ### acmesmith::default
@@ -58,10 +75,11 @@ Just include `acmesmith` in your node's `run_list`:
 ```json
 {
   "name":"my_node",
-  "run_list": ["recipe[acmesmith]"
-  ]
+  "run_list": ["recipe[acmesmith]"]
 }
 ```
+
+
 
 ## Contributing
 
